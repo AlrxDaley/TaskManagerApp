@@ -1,4 +1,3 @@
-from unicodedata import category
 from flask import redirect, render_template, request, url_for
 from taskmanager import app, db
 from taskmanager.models import Category, Task
@@ -6,13 +5,19 @@ from taskmanager.models import Category, Task
 
 @app.route("/")
 def home():
-    return render_template("tasks.html")
+    task = list(Task.query.order_by(Task.id).all())
+    return render_template("tasks.html", task=task)
 
 
 @app.route("/categories")
 def categories():
     categories = list(Category.query.order_by(Category.category_name).all())
     return render_template("categories.html", categories=categories)
+
+@app.route("/task")
+def task():
+    task = list(Task.query.order_by(Task.task_name).all())
+    return render_template("tasks.html", task=task)
 
 
 @app.route("/add_category", methods=["GET", "POST"])
